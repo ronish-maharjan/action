@@ -1,0 +1,27 @@
+# Name of the workflow
+name: testing the github action workflow
+
+# trigger the workflow on 
+on:
+  
+  # Manual trigger
+  workflow_dispatch:
+
+# Task to perform
+jobs:
+  # Task name and its options
+  myjob:
+    
+    # Selecting the os to run the job
+    runs-on: ubuntu-latest
+
+    # Steps to do 
+    steps:
+      - name: Setting up node 
+        uses: actions/setup-node@v3
+        with:
+          node-version: 18
+
+      - name: Print hello
+        run:|
+          node -e "console.log('hello world');console.log('why')"
