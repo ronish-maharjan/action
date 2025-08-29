@@ -1,27 +1,40 @@
-# Name of the workflow
 name: testing the github action workflow
 
-# trigger the workflow on 
 on:
-  
-  # Manual trigger
   workflow_dispatch:
 
-# Task to perform
 jobs:
-  # Task name and its options
-  myjob:
-    
-    # Selecting the os to run the job
+  createFile:
     runs-on: ubuntu-latest
 
-    # Steps to do 
     steps:
-      - name: Setting up node 
-        uses: actions/setup-node@v3
-        with:
-          node-version: 18
+      # Step 1: Checkout repository
+      - name: Checkout repository
+        uses: actions/checkout@v3
 
-      - name: Print hello
+      # Step 2: Create a file
+      - name: Create file
+        run: echo "hello" > myfile.txt
+
+      # Step 3: Configure Git
+      - name: Configure Git
         run: |
-          node -e "console.log('hello world');console.log('why')"
+          git config user.name "github-actions"
+          git config user.email "github-actions@users.noreply.github.com"
+
+      # Step 4: Commit changes
+      - name: Commit changes or edit file
+        run: |
+          git add myfile.txt
+          if ! git commit -m "Created new file"; then
+          echo "No changes to commit, editing file..."
+          echo "Extra content" >> myfile.txt
+          git add myfile.txt
+          git commit -m "Edited file because no changes"
+          fi
+
+      # Step 5: Push changes
+      - name: Push changes
+        run: git push
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
