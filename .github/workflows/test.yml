@@ -23,5 +23,5 @@ jobs:
           node-version: 18
 
       - name: Print hello
-        run:|
+        run: |
           node -e "console.log('hello world');console.log('why')"
